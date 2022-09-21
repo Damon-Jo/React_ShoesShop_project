@@ -4,11 +4,14 @@ import './App.css';
 import  bg from './img/bg.png';
 import {useState} from "react";
 import data from "./data.js"
-import { Routes, Route, Link } from "react-router-dom";
+import { Routes, Route, Link, useNavigate, Outlet } from "react-router-dom";
+import Detail from './routes/Detail.js';
 
 function App() {
 
   let [shoes] = useState(data)
+  let navigate = useNavigate();
+
 
   
   return (
@@ -17,10 +20,11 @@ function App() {
         <Container>
           <Navbar.Brand href="#home">ShoeShop</Navbar.Brand>
           <Nav className="me-auto">
-            {/* <Nav.Link href="#home">Home</Nav.Link>
-            <Nav.Link href="#features">Cart</Nav.Link> */}
-            <Link className="nav-link" to="/">홈</Link>
-            <Link className="nav-link" to="/detail">상세페이지</Link>
+            <Nav.Link onClick={()=>{navigate('/')}}>Home</Nav.Link>
+            <Nav.Link onClick={()=>{navigate('/detail')}}>Cart</Nav.Link>
+
+            {/* <Link className="nav-link" to="/">홈</Link>
+            <Link className="nav-link" to="/detail">상세페이지</Link> */}
 
           </Nav>
         </Container>
@@ -49,19 +53,41 @@ function App() {
         
 
       }/>
-      <Route path="/detail" element={<div>상세페이지임</div>}/>
+      <Route path="/detail" element={<Detail />}/>
+
+      {/* Nested Routes */}
+      <Route path="/about" element={<About/>}>
+        <Route path="member" element={<div>맴버임</div>} />
+        <Route path="location" element={<div>위치정보임</div>} />
+      </Route>
+
+      <Route path="/event" element={<Event/>}>
+        <Route path="one" element={<div>첫 주문시 양배추즙 서비스</div>} />
+        <Route path="two" element={<div>생일기념 쿠폰 받기</div>} />
+      </Route>
+
 
     </Routes>
-
-
-
-
-
-
-      
-
     </div>
   );
+}
+
+function Event(){
+  return(
+    <>
+      <h4>오늘의 이벤트</h4>
+      <Outlet></Outlet>
+    </>
+  )
+}
+
+function About(){
+  return(
+    <div>
+      <h4>회사정보임</h4>
+      <Outlet></Outlet>
+    </div>
+  )
 }
 
 function Card(props) {
